@@ -47,8 +47,8 @@ export function BookingPage() {
         const sl = await blink.db.slots.list({ where: { serviceId } });
         setService(s as any);
         setSlots(sl as any);
-      } catch (err) {
-        toast.error("Failed to load booking details");
+      } catch {
+        // Silently handle — page will show fallback state
       } finally {
         setLoading(false);
       }

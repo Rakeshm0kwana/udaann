@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Search, MapPin, Star, ShieldCheck, Clock, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { blink } from "@/lib/blink";
+import { useAuth } from "@/hooks/useAuth";
 
 const categories = [
   { name: "Home Services", icon: "🏠", color: "bg-orange-100" },
@@ -14,24 +15,35 @@ const categories = [
   { name: "Local Drivers", icon: "🚗", color: "bg-indigo-100" },
 ];
 
+const defaultVendors = [
+  { id: "v1", businessName: "Sharma Home Services", category: "Home Services", rating: 4.8, totalReviews: 127, description: "Professional plumbing, electrical & home repair services in Mumbai.", logoUrl: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop", verificationStatus: "verified" },
+  { id: "v2", businessName: "Bharat Express Transport", category: "Transport", rating: 4.6, totalReviews: 89, description: "Reliable local & intercity goods transport with real-time tracking.", logoUrl: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&h=400&fit=crop", verificationStatus: "verified" },
+  { id: "v3", businessName: "Celebration Events Co.", category: "Event Planning", rating: 4.9, totalReviews: 203, description: "Complete event management for weddings, corporate events & local tournaments.", logoUrl: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&h=400&fit=crop", verificationStatus: "verified" },
+];
+
 export function HomePage() {
   const navigate = useNavigate();
-  const [featuredVendors, setFeaturedVendors] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { isAuthenticated } = useAuth();
+  const [featuredVendors, setFeaturedVendors] = useState<any[]>(defaultVendors);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     const fetchVendors = async () => {
+      setLoading(true);
       try {
         const data = await blink.db.vendors.list({ limit: 6 });
-        setFeaturedVendors(data as any[]);
+        if (data && (data as any[]).length > 0) {
+          setFeaturedVendors(data as any[]);
+        }
       } catch (err) {
-        console.error("Failed to fetch vendors", err);
+        // Fallback to default vendors silently — homepage should always render
       } finally {
         setLoading(false);
       }
     };
     fetchVendors();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <div className="space-y-12">

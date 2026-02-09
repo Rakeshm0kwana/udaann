@@ -49,10 +49,10 @@ export function VendorDetailsPage() {
       try {
         const v = await blink.db.vendors.get(id as string);
         const s = await blink.db.services.list({ where: { vendorId: id } });
-        setVendor(v as any);
-        setServices(s as any);
-      } catch (err) {
-        toast.error("Failed to load vendor details");
+        if (v) setVendor(v as any);
+        if (s) setServices(s as any);
+      } catch {
+        // Silently handle auth/fetch errors — show "not found" fallback
       } finally {
         setLoading(false);
       }

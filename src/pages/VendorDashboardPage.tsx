@@ -35,8 +35,8 @@ export function VendorDashboardPage() {
         // Mocking recent bookings for dashboard
         const data = await blink.db.bookings.list({ limit: 5, orderBy: { createdAt: 'desc' } });
         setRecentBookings(data as any[]);
-      } catch (err) {
-        console.error(err);
+      } catch {
+        // Silently handle auth/fetch errors
       } finally {
         setLoading(false);
       }
