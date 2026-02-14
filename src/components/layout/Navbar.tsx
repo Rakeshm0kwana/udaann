@@ -14,9 +14,7 @@ export function Navbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
         </Button>
         
         <Link to="/" className="flex items-center gap-2 mr-6">
-          <div className="h-8 w-8 rounded-lg primary-gradient flex items-center justify-center text-white font-bold text-xl shadow-elegant">
-            U
-          </div>
+          <img src="/udaann-logo.png" alt="UDAAN Logo" className="h-9 w-auto object-contain" />
           <span className="text-xl font-bold tracking-tight hidden sm:inline-block">UDAAN</span>
         </Link>
 
